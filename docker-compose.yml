@@ -1,0 +1,18 @@
+services:
+  user-service:
+    build: ./user-service
+    environment:
+      - SERVER_PORT=80
+
+  order-service:
+    build: ./order-service
+    environment:
+      - SERVER_PORT=80
+
+  vaadin-app:
+    build: ./vaadin-app
+    environment:
+      - USER_SERVICE_URL=http://user-service
+      - ORDER_SERVICE_URL=http://order-service
+    ports:
+      - "8080:8080"
