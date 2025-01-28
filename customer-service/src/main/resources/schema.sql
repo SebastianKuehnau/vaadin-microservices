@@ -1,6 +1,6 @@
-DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS customers;
 
-CREATE TABLE users
+CREATE TABLE customers
 (
     id    SERIAL PRIMARY KEY,
     name  VARCHAR(255)        NOT NULL,

@@ -1,11 +1,11 @@
-package com.example.userservice;
+package com.example.customerservice;
 
 
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "users")
-public class User {
+@Table(name = "customers")
+public class Customer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -13,10 +13,10 @@ public class User {
     private String name;
     private String email;
 
-    public User() {
+    public Customer() {
     }
 
-    public User(String name, String email) {
+    public Customer(String name, String email) {
         this.name = name;
         this.email = email;
     }
