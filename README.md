@@ -18,10 +18,10 @@ graph TD
     A[Browser] <-->|Type-safe RPC| B[Hilla View]
     C[Browser] <-->|Type-safe RPC| D[Flow View]
     subgraph Vaadin App
-    B --- E[Customer Service]
-    D --- E[Customer Service]
+    B --- E[My Application Service]
+    D --- E[My Application Service]
     end
-    E --> |REST| F[User Service]
+    E --> |REST| F[Customer Service]
     E --> |REST| G[Order Service]
 ```
 ## Running the example
