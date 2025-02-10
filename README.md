@@ -4,7 +4,7 @@ This example application demonstrates how to use Flow and Hilla to call microser
 Hilla follows a backends-for-frontends pattern, where each frontend has its own backend. Flow is orchestrating the result of different Backend Services
 The frontend is responsible for aggregating data from multiple services and presenting it to the user.
 
-Hilla uses type-safe RPC calls to communicate between the frontend and backend.
+Hilla and Flow use type-safe RPC calls to communicate between the frontend and backend.
 
 The example consists of 3 applications:
 - `user-service` - A service that provides user data
