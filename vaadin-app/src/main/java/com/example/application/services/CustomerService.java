@@ -3,9 +3,12 @@ package com.example.application.services;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import com.vaadin.hilla.BrowserCallable;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.web.client.RestClient;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @BrowserCallable
 @AnonymousAllowed
@@ -20,18 +23,11 @@ public class CustomerService {
     public record Customer(User user, List<Order> orders) {
     }
 
-    private final WebClient.Builder webClientBuilder;
-
     @Value("${user-service.url}")
     private String userServiceUrl;
 
     @Value("${order-service.url}")
     private String orderServiceUrl;
-
-    public CustomerService(WebClient.Builder webClientBuilder) {
-        this.webClientBuilder = webClientBuilder;
-    }
-
 
     public List<Customer> getCustomers() {
         // Call user service to get all users
@@ -46,26 +42,27 @@ public class CustomerService {
     }
 
     private List<User> getUsers() {
-        WebClient userClient = webClientBuilder.baseUrl(userServiceUrl).build();
-        var users = userClient.get()
-                .uri("/users")
-                .retrieve()
-                .bodyToFlux(User.class)
-                .collectList()
-                .block();
+        RestClient userRestClient = RestClient.builder()
+                .baseUrl(userServiceUrl)
+                .build();
 
-        return users;
+        return Optional.ofNullable(userRestClient.get()
+                    .uri("/users")
+                    .retrieve()
+                    .body(new ParameterizedTypeReference<List<User>>() {}))
+                .orElse(Collections.emptyList());
     }
 
     private List<Order> getOrders(Long userId) {
-        WebClient orderClient = webClientBuilder.baseUrl(orderServiceUrl).build();
-        var orders = orderClient.get()
-                .uri("/orders/user/" + userId)
-                .retrieve()
-                .bodyToFlux(Order.class)
-                .collectList()
-                .block();
+        RestClient orderRestClient = RestClient.builder()
+                .baseUrl(orderServiceUrl)
+                .build();
 
-        return orders;
+        return Optional.ofNullable(
+                orderRestClient.get()
+                    .uri("/orders/user/%s".formatted(userId.toString()))
+                    .retrieve()
+                    .body(new ParameterizedTypeReference<List<Order>>() {
+                })).orElse(Collections.emptyList());
     }
 }
